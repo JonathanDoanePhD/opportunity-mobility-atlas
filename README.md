@@ -207,7 +207,7 @@ County averages say nothing about any individual child.
 
 ## License, citation and data terms
 
-- **Code:** MIT (proposed; see `LICENSE`). **Outputs:** CC BY 4.0 (proposed), subject to the source terms below.
+- **Code:** MIT (see `LICENSE`). **Outputs:** CC BY 4.0, subject to the source terms below.
 - **Cite this project as:** JonathanDoanePhD (2026). *Opportunity & Mobility Atlas*. https://github.com/JonathanDoanePhD/opportunity-mobility-atlas
 - **Data sources and terms** (from `data/sources.csv`; recorded versions and checksums in `data/sources.lock.csv`):
 
@@ -228,10 +228,11 @@ County averages say nothing about any individual child.
 Built with AI assistance (Claude). Exploratory research: every statistic needs checking against its original source
 before it appears in funder reports, grant applications or public material.
 
-## Before public release
+## Status and limitations
 
-- [ ] Every statistic in this README and in `output/` is checked against its original source.
-- [ ] People who know the places review the priority and beat-the-odds county lists.
-- [ ] Confirm Chetty et al. citations.
-- [ ] Opportunity Insights covariates file has no published license: link to it rather than re-hosting, or ask OI.
-- [ ] The owner confirms the license choice above.
+Published 2026-11-26 as exploratory research. The analysis is complete and reproducible, but these checks have **not yet been done**, so treat figures as provisional:
+
+- Statistics in this README and in `output/` have not been independently checked against their original sources.
+- People who know the places review the priority and beat-the-odds county lists.
+- Confirm Chetty et al. citations.
+- Opportunity Insights covariates file has no published license: link to it rather than re-hosting, or ask OI.
