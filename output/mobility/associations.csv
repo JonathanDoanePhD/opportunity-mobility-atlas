@@ -1,0 +1,17 @@
+predictor,label,group,measured,n_counties,bivariate_coef,bivariate_ci_low,bivariate_ci_high,bivariate_r2,adjusted_coef,adjusted_ci_low,adjusted_ci_high,adjusted_state_fe_coef,adjusted_state_fe_ci_low,adjusted_state_fe_ci_high
+share_black2000,Black population share,Place,2000,3134,-2.514,-2.932,-2.095,0.3663,-1.258,-1.61,-0.9048,-0.3586,-0.7697,0.05247
+singleparent_share1990,Single-parent households,Poverty & family,1990,3134,-2.029,-2.966,-1.092,0.2387,-1.206,-1.665,-0.7469,-1.9,-2.286,-1.515
+log_youth_orgs,Youth-serving nonprofits per child (log),Youth nonprofits,2026,3125,-1.027,-1.381,-0.6723,0.06076,,,,,,
+poor_share1990,Poverty rate,Poverty & family,1990,3134,-1.01,-1.558,-0.4616,0.05913,1.315,0.8833,1.747,0.8284,0.3299,1.327
+support_ratio_county,Support ratio,Social capital,2022,3087,-0.931,-1.389,-0.473,0.05044,-0.8871,-1.296,-0.4785,-0.5872,-0.8714,-0.303
+log_popdensity2000,Population density (log),Place,2000,3134,-0.3036,-1.039,0.4317,0.005342,1.224,0.5208,1.927,0.86,0.2876,1.432
+clustering_county,Friendship clustering,Social capital,2022,3087,-0.01804,-0.4059,0.3698,1.895e-05,0.6835,0.3688,0.9981,0.8146,0.5505,1.079
+civic_organizations_county,Civic organizations,Social capital,2022,3087,0.2539,-0.1712,0.6791,0.003752,0.1039,-0.1859,0.3938,0.1964,-0.02799,0.4207
+traveltime15_2010,Share with commute < 15 min,Place,2010,3134,0.4935,-0.1005,1.088,0.01412,1.039,0.7384,1.339,0.2039,-0.02456,0.4324
+ann_avg_job_growth_2004_2013,Job growth,Jobs,2004-13,3129,0.578,0.2429,0.9131,0.01937,0.1761,-0.08823,0.4404,0.1381,-0.06421,0.3404
+volunteering_rate_county,Volunteering rate,Social capital,2022,3087,0.748,0.3431,1.153,0.03256,-0.406,-0.6119,-0.2,-0.1757,-0.323,-0.02836
+emp2000,Employment rate,Jobs,2000,3134,0.7939,0.3657,1.222,0.03654,-0.7657,-1.246,-0.2853,-0.4536,-0.7889,-0.1183
+frac_coll_plus2000,Adults with a college degree,Education,2000,3134,0.7986,0.3853,1.212,0.03697,-0.7423,-1.036,-0.4491,-0.3645,-0.7486,0.01955
+log_med_hhinc1990,Median household income (log),Poverty & family,1990,3134,1.006,0.5317,1.48,0.05864,1.397,0.8042,1.99,0.4088,-0.3743,1.192
+gsmn_math_g3_2013,3rd-grade math scores,Education,2013,3066,1.581,1.063,2.099,0.146,0.08644,-0.2008,0.3736,0.4971,0.1754,0.8188
+ec_county,Economic connectedness,Social capital,2022,3016,2.689,2.358,3.021,0.4228,2.38,2.028,2.732,1.381,1.08,1.682

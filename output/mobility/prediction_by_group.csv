@@ -1,0 +1,8 @@
+factor_group,variables,cv_r2_alone,cv_r2_drop_when_removed
+All factors together,15,0.635,0.000
+Education,2,0.032,0.009
+Jobs,2,-0.007,0.015
+Place,3,0.346,0.098
+Poverty & family,3,0.182,0.032
+Social capital,5,0.392,0.310
+Economic connectedness only,1,0.388,0.166

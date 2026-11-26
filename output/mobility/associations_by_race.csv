@@ -1,0 +1,29 @@
+group,predictor,label,n_counties,coef,ci_low,ci_high
+Black,poor_share1990,Poverty rate,1496,-0.2904,-0.8061,0.2253
+Black,singleparent_share1990,Single-parent households,1496,-0.1912,-0.8103,0.4278
+Black,frac_coll_plus2000,Adults with a college degree,1496,0.5391,0.06122,1.017
+Black,ec_county,Economic connectedness,1463,1.183,0.8252,1.541
+Black,clustering_county,Friendship clustering,1479,-0.5004,-0.9657,-0.03516
+Black,volunteering_rate_county,Volunteering rate,1479,-0.1973,-0.4987,0.1042
+Black,traveltime15_2010,Share with commute < 15 min,1496,-0.9339,-1.64,-0.228
+Hispanic,poor_share1990,Poverty rate,1605,0.1198,-0.4666,0.7062
+Hispanic,singleparent_share1990,Single-parent households,1605,-0.6001,-0.8555,-0.3447
+Hispanic,frac_coll_plus2000,Adults with a college degree,1605,0.3966,-0.0703,0.8636
+Hispanic,ec_county,Economic connectedness,1580,0.3994,-0.1637,0.9625
+Hispanic,clustering_county,Friendship clustering,1594,-0.06198,-0.4331,0.3092
+Hispanic,volunteering_rate_county,Volunteering rate,1594,-0.3923,-0.7769,-0.007777
+Hispanic,traveltime15_2010,Share with commute < 15 min,1605,-0.2371,-0.6274,0.1533
+White,poor_share1990,Poverty rate,3093,-0.7291,-1.006,-0.4525
+White,singleparent_share1990,Single-parent households,3093,-0.8537,-1.393,-0.3144
+White,frac_coll_plus2000,Adults with a college degree,3093,1.395,1.084,1.705
+White,ec_county,Economic connectedness,2997,2.137,1.883,2.392
+White,clustering_county,Friendship clustering,3055,-0.2708,-0.6915,0.15
+White,volunteering_rate_county,Volunteering rate,3055,0.06103,-0.3094,0.4315
+White,traveltime15_2010,Share with commute < 15 min,3093,0.3007,-0.4092,1.011
+All,poor_share1990,Poverty rate,3131,-1.01,-1.558,-0.4616
+All,singleparent_share1990,Single-parent households,3131,-2.029,-2.966,-1.091
+All,frac_coll_plus2000,Adults with a college degree,3131,0.7986,0.3853,1.212
+All,ec_county,Economic connectedness,3014,2.689,2.358,3.021
+All,clustering_county,Friendship clustering,3084,-0.01807,-0.4059,0.3698
+All,volunteering_rate_county,Volunteering rate,3084,0.7481,0.3431,1.153
+All,traveltime15_2010,Share with commute < 15 min,3131,0.4934,-0.1007,1.087

@@ -1,0 +1,12 @@
+file,url,source,license,unzip
+saipe_est22all.xls,https://www2.census.gov/programs-surveys/saipe/datasets/2022/2022-state-and-county/est22all.xls,Census Small Area Income & Poverty Estimates 2022,U.S. government work (public domain),
+SVI_2022_US_county.csv,https://svi.cdc.gov/Documents/Data/2022/csv/states_counties/SVI_2022_US_county.csv,CDC/ATSDR Social Vulnerability Index 2022,U.S. government work (public domain),
+county_outcomes_simple.csv,https://www2.census.gov/ces/opportunity/county_outcomes_simple.csv,Opportunity Insights county outcomes (Census Bureau public-use release),Public-use Census Bureau release; no separate license found (checked 2026-11-14); cite Chetty et al. Opportunity Atlas,
+cty_covariates.csv,https://opportunityinsights.org/wp-content/uploads/2018/12/cty_covariates.csv,Opportunity Insights county characteristics,No license published on opportunityinsights.org/data (site notice: all rights reserved; checked 2026-11-14); cite and link rather than re-host or ask OI before redistributing,
+social_capital_county.csv,https://data.humdata.org/dataset/85ee8e10-0c66-4635-b997-79b6fad44c71/resource/ec896b64-c922-4737-b759-e4bd7f73b8cc/download/social_capital_county.csv,Social Capital Atlas (Chetty et al. 2022) via HDX,Meta data license: use/redistribute incl. license; no endorsement; no re-identification,
+eo1.csv,https://www.irs.gov/pub/irs-soi/eo1.csv,IRS Exempt Organizations Business Master File (region 1),U.S. government work (public domain),
+eo2.csv,https://www.irs.gov/pub/irs-soi/eo2.csv,IRS Exempt Organizations Business Master File (region 2),U.S. government work (public domain),
+eo3.csv,https://www.irs.gov/pub/irs-soi/eo3.csv,IRS Exempt Organizations Business Master File (region 3),U.S. government work (public domain),
+eo4.csv,https://www.irs.gov/pub/irs-soi/eo4.csv,IRS Exempt Organizations Business Master File (region 4),U.S. government work (public domain),
+zcta_county_2020.txt,https://www2.census.gov/geo/docs/maps-data/data/rel2020/zcta520/tab20_zcta520_county20_natl.txt,Census 2020 ZCTA-to-county relationship file,U.S. government work (public domain),
+shapes/cb_2022_us_county_20m.zip,https://www2.census.gov/geo/tiger/GENZ2022/shp/cb_2022_us_county_20m.zip,Census cartographic county boundaries 2022,U.S. government work (public domain),yes

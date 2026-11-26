@@ -1,0 +1,305 @@
+<title>County Opportunity Atlas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: masthead, then a map column with a details sidebar that stacks under it on phones */
+:root {
+  --bg: #f5f7fa; --surface: #ffffff; --fg: #141a22; --muted: #566171; --line: #dbe0e7;
+  --accent: #2a78d6; --warm: #eb6834; --nodata: #e3e6eb; --stroke: #ffffff; --focus: #1c5cab;
+  --font-body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e1218; --surface: #161b23; --fg: #e7ebf1; --muted: #9ba5b3; --line: #29313c;
+  --accent: #3987e5; --warm: #d95926; --nodata: #2a313b; --stroke: #161b23; --focus: #86b6ef; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0e1218; --surface: #161b23; --fg: #e7ebf1; --muted: #9ba5b3; --line: #29313c;
+  --accent: #3987e5; --warm: #d95926; --nodata: #2a313b; --stroke: #161b23; --focus: #86b6ef; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.5; margin: 0; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 24px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header h1 { font-weight: 800; font-size: clamp(1.6rem, 3.4vw, 2.3rem); letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+header p { color: var(--muted); max-width: 68ch; margin: 6px 0 0; }
+.eyebrow { font-family: var(--font-data); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: end; margin: 20px 0 12px; }
+.layers { display: flex; flex-wrap: wrap; gap: 6px; }
+.layers button { font: 500 0.85rem var(--font-body); color: var(--fg); background: var(--surface); border: 1px solid var(--line);
+  border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.layers button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.layers button:focus-visible, select:focus-visible, input:focus-visible, .plist button:focus-visible, .reset:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.field { display: flex; flex-direction: column; gap: 3px; }
+.field label { font-size: 0.75rem; color: var(--muted); }
+select, input[type="search"] { font: 0.9rem var(--font-body); color: var(--fg); background: var(--surface); border: 1px solid var(--line);
+  border-radius: 8px; padding: 6px 10px; min-width: 0; }
+.reset { font: 500 0.85rem var(--font-body); background: none; border: 1px solid var(--line); color: var(--fg); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.mapbox { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; position: relative; min-width: 0; }
+.layer-note { margin: 0 0 6px; font-size: 0.9rem; }
+.layer-note b { font-weight: 600; }
+svg.map { width: 100%; height: auto; display: block; touch-action: none; }
+svg.map path.c { stroke: var(--stroke); stroke-width: 0.25; vector-effect: non-scaling-stroke; cursor: pointer; }
+svg.map path.c:hover { stroke: var(--fg); stroke-width: 1.2; }
+svg.map path.sel { stroke: var(--fg); stroke-width: 2.2; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+.tip { position: absolute; pointer-events: none; background: var(--fg); color: var(--bg); font-size: 0.8rem; padding: 6px 9px; border-radius: 6px;
+  max-width: 240px; line-height: 1.35; }
+aside { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; min-width: 0; }
+.card h2 { font-size: 1.1rem; margin: 0; font-weight: 700; }
+.card h3 { font-size: 0.8rem; margin: 0 0 8px; color: var(--muted); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.pill { display: inline-block; font-size: 0.75rem; font-weight: 600; border-radius: 999px; padding: 2px 9px; margin-top: 6px; }
+.pill.p3 { background: var(--warm); color: #fff; }
+.pill.p2 { border: 1px dashed var(--warm); color: var(--fg); }
+.pill.p1 { background: var(--accent); color: #fff; }
+.pill.p0 { border: 1px solid var(--line); color: var(--muted); }
+.pill.bto { border: 1px solid var(--accent); color: var(--fg); margin-left: 4px; }
+dl.stats { display: grid; grid-template-columns: 1fr auto; gap: 7px 12px; margin: 12px 0 0; font-size: 0.88rem; }
+dl.stats dt { color: var(--muted); }
+dl.stats dd { margin: 0; text-align: right; font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+.bar { grid-column: 1 / -1; height: 4px; background: var(--line); border-radius: 2px; margin-top: -3px; position: relative; }
+.bar b { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 2px; }
+.empty { color: var(--muted); font-size: 0.9rem; margin: 8px 0 0; }
+.plist { list-style: none; padding: 0; margin: 0; max-height: 360px; overflow-y: auto; }
+.plist li + li { border-top: 1px solid var(--line); }
+.plist button { all: unset; box-sizing: border-box; width: 100%; display: grid; grid-template-columns: 2.4em 1fr auto; gap: 8px; padding: 7px 2px; cursor: pointer; font-size: 0.87rem; }
+.plist button:hover { background: var(--bg); }
+.plist .rk { font-family: var(--font-data); color: var(--muted); font-variant-numeric: tabular-nums; }
+.plist .v { font-family: var(--font-data); font-variant-numeric: tabular-nums; color: var(--muted); }
+footer { color: var(--muted); font-size: 0.8rem; margin-top: 22px; max-width: 90ch; }
+footer p { margin: 6px 0; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">3,143 U.S. counties · public data · exploratory</div>
+    <h1>County Opportunity Atlas</h1>
+    <p>Where children face the most structural barriers, where youth-serving nonprofits are thin, and where children from low-income families have gone on to earn more than their parents.</p>
+  </header>
+
+  <div class="controls">
+    <div class="field" style="flex:1 1 100%">
+      <label id="layers-label">Map layer</label>
+      <div class="layers" role="group" aria-labelledby="layers-label" id="layers"></div>
+    </div>
+    <div class="field"><label for="state">Zoom to state</label><select id="state"><option value="">All states</option></select></div>
+    <div class="field" style="flex:1 1 220px"><label for="search">Find a county</label><input id="search" type="search" list="county-list" placeholder="e.g. Danville city, VA" autocomplete="off"><datalist id="county-list"></datalist></div>
+    <button class="reset" id="reset" type="button">Reset view</button>
+  </div>
+
+  <div class="grid">
+    <div class="mapbox">
+      <p class="layer-note" id="note"></p>
+      <svg class="map" id="map" viewBox="0 0 975 610" role="img" aria-label="Map of U.S. counties colored by the selected layer"></svg>
+      <div class="legend" id="legend"></div>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+    <aside>
+      <div class="card" id="detail" aria-live="polite">
+        <h3>County details</h3>
+        <p class="empty">Hover over or tap a county to see its numbers. The list below shows the highest-priority counties.</p>
+      </div>
+      <div class="card">
+        <h3>Priority counties (≥ 2,000 children)</h3>
+        <ol class="plist" id="plist"></ol>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    <p><b>How to read this.</b> Need blends child poverty (2022), the CDC Social Vulnerability Index (2022) and low upward mobility. Supply counts youth-serving nonprofits (IRS categories O20–O23, O30–O31, O50) per 10,000 children. Priority = top quarter on need and bottom quarter on supply. Upward mobility is the average adult income percentile of children born 1978–83 to parents at the 25th income percentile. Economic connectedness is the share of high-income friends among low-income people (×2; 1 = class-integrated). "Beats the odds" marks high-poverty counties with mobility clearly above what their 1990 poverty, single-parent share and income predict, compared within their state.</p>
+    <p><b>Limits.</b> Nonprofit counts miss school, tribal, faith-based and government programs, so tribal and rural areas look emptier than they are. Connecticut isn't scored (its 2022 county boundaries changed). County figures say nothing about any one child. These are associations, not causal effects. Verify figures against the original sources before external use.</p>
+    <p>Sources: Census SAIPE 2022 and boundaries; CDC/ATSDR SVI 2022; Opportunity Insights; Social Capital Atlas (Meta data license); IRS Exempt Organizations Business Master File.</p>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+const DATA = __DATA__;
+const GEO = __GEO__;
+// row: [name, st, children, need, supply, cat, childPov, mobility, ec, orgs10k, dedicatedMentor, beatsOdds, gapRank, svi]
+const F = { name:0, st:1, kids:2, need:3, supply:4, cat:5, pov:6, mob:7, ec:8, orgs:9, ded:10, bto:11, rank:12, svi:13 };
+const BLUE = ["#cde2fb", "#86b6ef", "#3987e5", "#1c5cab", "#0d366b"];
+const ORANGE = ["#fde3d6", "#f7b393", "#ef8452", "#c9561f", "#8a3711"];
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const CAT = [
+  { v: 3, label: "High need, fewest youth nonprofits", color: () => css("--warm") },
+  { v: 2, label: "Same, under 2,000 children (less reliable)", color: () => "url(#hatch)" },
+  { v: 1, label: "High need, more youth nonprofits", color: () => css("--accent") },
+  { v: 0, label: "Lower need", color: () => css("--nodata") },
+];
+const LAYERS = [
+  { key: "gap", label: "Priority counties", type: "cat",
+    note: "<b>Priority counties:</b> high structural need and the fewest youth-serving nonprofits per child." },
+  { key: "need", label: "Need index", type: "seq", f: F.need, ramp: ORANGE, fmt: v => v.toFixed(0),
+    note: "<b>Need index</b> (0–100): higher means more child poverty, social vulnerability and lower mobility." },
+  { key: "orgs", label: "Youth nonprofits per child", type: "seq", f: F.orgs, ramp: BLUE, fmt: v => v.toFixed(1),
+    note: "<b>Youth-serving nonprofits</b> per 10,000 children (registered with the IRS)." },
+  { key: "mob", label: "Upward mobility", type: "seq", f: F.mob, ramp: BLUE, fmt: v => v.toFixed(1),
+    note: "<b>Upward mobility:</b> average adult income percentile of children raised by parents at the 25th percentile." },
+  { key: "ec", label: "Cross-class friendship", type: "seq", f: F.ec, ramp: BLUE, fmt: v => v.toFixed(2),
+    note: "<b>Economic connectedness:</b> how many high-income friends low-income people have (1 = class-integrated). The strongest single correlate of upward mobility." },
+  { key: "pov", label: "Child poverty", type: "seq", f: F.pov, ramp: ORANGE, fmt: v => v.toFixed(1) + "%",
+    note: "<b>Child poverty</b>: share of children under 18 below the poverty line, 2022." },
+  { key: "bto", label: "Beats the odds", type: "flag",
+    note: "<b>Beats the odds:</b> high-poverty counties where children went on to earn clearly more than predicted. Possible places to learn from." },
+];
+
+const svg = d3.select("#map");
+const defs = svg.append("defs");
+const hatch = defs.append("pattern").attr("id", "hatch").attr("patternUnits", "userSpaceOnUse")
+  .attr("width", 5).attr("height", 5).attr("patternTransform", "rotate(45)");
+hatch.append("rect").attr("width", 5).attr("height", 5).attr("class", "hatch-bg");
+hatch.append("line").attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", 5).attr("stroke-width", 2.4).attr("class", "hatch-line");
+const g = svg.append("g");
+const projection = d3.geoAlbersUsa().fitSize([975, 610], GEO);
+const path = d3.geoPath(projection);
+const counties = g.selectAll("path").data(GEO.features).join("path")
+  .attr("class", "c").attr("d", path).attr("fill-rule", "evenodd");
+
+let layer = LAYERS[0], selected = null;
+
+function themeHatch() {
+  hatch.select(".hatch-bg").attr("fill", css("--surface"));
+  hatch.select(".hatch-line").attr("stroke", css("--warm"));
+}
+
+function render() {
+  themeHatch();
+  const nodata = css("--nodata");
+  let color, legendItems;
+  if (layer.type === "cat") {
+    color = d => { const r = DATA[d.id]; if (!r || r[F.need] == null) return nodata; return CAT.find(c => c.v === r[F.cat]).color(); };
+    legendItems = CAT.map(c => [c.color(), c.label]);
+  } else if (layer.type === "flag") {
+    color = d => { const r = DATA[d.id]; return r && r[F.bto] ? css("--accent") : nodata; };
+    legendItems = [[css("--accent"), "Beats the odds (high poverty, mobility above prediction)"], [nodata, "Other counties"]];
+  } else {
+    const vals = Object.values(DATA).map(r => r[layer.f]).filter(v => v != null).sort(d3.ascending);
+    const br = [0.2, 0.4, 0.6, 0.8].map(q => d3.quantileSorted(vals, q));
+    const sc = d3.scaleThreshold().domain(br).range(layer.ramp);
+    color = d => { const r = DATA[d.id]; const v = r ? r[layer.f] : null; return v == null ? nodata : sc(v); };
+    const edges = [vals[0], ...br, vals[vals.length - 1]];
+    legendItems = layer.ramp.map((c, i) => [c, `${layer.fmt(edges[i])} – ${layer.fmt(edges[i + 1])}`]);
+    legendItems.push([nodata, "No data"]);
+  }
+  counties.attr("fill", color);
+  d3.select("#legend").html("").selectAll("span").data(legendItems).join("span")
+    .html(([c, l]) => `<i style="background:${c.startsWith("url") ? "repeating-linear-gradient(45deg," + css("--warm") + " 0 2px," + css("--surface") + " 2px 5px)" : c}"></i>${l}`);
+  d3.select("#note").html(layer.note);
+  d3.selectAll("#layers button").attr("aria-pressed", d => d.key === layer.key);
+}
+
+d3.select("#layers").selectAll("button").data(LAYERS).join("button").attr("type", "button")
+  .text(d => d.label).on("click", (e, d) => { layer = d; render(); });
+
+// Details
+const fmtInt = d3.format(",");
+const CATTXT = { 3: ["p3", "Priority county"], 2: ["p2", "Priority (small county)"], 1: ["p1", "High need"], 0: ["p0", "Lower need"] };
+function pctRank(f, v) {
+  const vals = Object.values(DATA).map(r => r[f]).filter(x => x != null);
+  return v == null ? null : 100 * vals.filter(x => x <= v).length / vals.length;
+}
+function statRow(label, val, f, raw, color) {
+  const p = f == null ? null : pctRank(f, raw);
+  return `<dt>${label}</dt><dd>${val}</dd>` + (p == null ? "" :
+    `<div class="bar" title="Percentile among counties: ${p.toFixed(0)}"><b style="width:${p}%;background:${color}"></b></div>`);
+}
+function showDetail(fips) {
+  const r = DATA[fips];
+  const el = document.getElementById("detail");
+  if (!r) { el.innerHTML = `<h3>County details</h3><p class="empty">No data for this area.</p>`; return; }
+  const [cls, txt] = CATTXT[r[F.cat]] || ["p0", "Not scored"];
+  const na = "–", b = css("--accent"), w = css("--warm");
+  el.innerHTML = `<h3>County details</h3><h2>${r[F.name]}, ${r[F.st]}</h2>
+    <span class="pill ${r[F.need] == null ? "p0" : cls}">${r[F.need] == null ? "Not scored" : txt}</span>${r[F.bto] ? '<span class="pill bto">Beats the odds</span>' : ""}
+    <dl class="stats">
+      ${statRow("Children (0–17)", r[F.kids] == null ? na : fmtInt(r[F.kids]))}
+      ${statRow("Need index", r[F.need] == null ? na : r[F.need].toFixed(0), F.need, r[F.need], w)}
+      ${statRow("Child poverty", r[F.pov] == null ? na : r[F.pov].toFixed(1) + "%", F.pov, r[F.pov], w)}
+      ${statRow("Social vulnerability pctile", r[F.svi] == null ? na : r[F.svi].toFixed(0), F.svi, r[F.svi], w)}
+      ${statRow("Youth nonprofits / 10k children", r[F.orgs] == null ? na : r[F.orgs].toFixed(1), F.orgs, r[F.orgs], b)}
+      ${statRow("Dedicated mentoring nonprofit", r[F.ded] == null ? na : (r[F.ded] ? "Yes" : "None found"))}
+      ${statRow("Upward mobility (income pctile)", r[F.mob] == null ? na : r[F.mob].toFixed(1), F.mob, r[F.mob], b)}
+      ${statRow("Cross-class friendship", r[F.ec] == null ? na : r[F.ec].toFixed(2), F.ec, r[F.ec], b)}
+      ${statRow("Opportunity-gap rank", r[F.rank] == null ? na : fmtInt(r[F.rank]) + " of 3,134")}
+    </dl>`;
+}
+function select(fips) {
+  selected = fips;
+  counties.classed("sel", d => d.id === fips);
+  counties.filter(d => d.id === fips).raise();
+  showDetail(fips);
+}
+
+// Tooltip
+const tip = document.getElementById("tip"), box = document.querySelector(".mapbox");
+counties.on("pointermove", (e, d) => {
+  const r = DATA[d.id];
+  if (e.pointerType !== "mouse") return;
+  tip.hidden = false;
+  let extra = "";
+  if (r && layer.f != null && r[layer.f] != null) extra = `<br>${layer.label}: ${layer.fmt(r[layer.f])}`;
+  else if (r && layer.type === "cat") extra = r[F.need] == null ? "<br>Not scored" : `<br>${CATTXT[r[F.cat]][1]}`;
+  else if (r && layer.type === "flag") extra = r[F.bto] ? "<br>Beats the odds" : "";
+  tip.innerHTML = r ? `<b>${r[F.name]}, ${r[F.st]}</b>${extra}` : "No data";
+  const bb = box.getBoundingClientRect();
+  let x = e.clientX - bb.left + 14, y = e.clientY - bb.top + 14;
+  if (x + 240 > bb.width) x = e.clientX - bb.left - 250;
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+  showDetail(d.id);
+}).on("pointerleave", () => { tip.hidden = true; if (selected) showDetail(selected); })
+  .on("click", (e, d) => select(d.id));
+
+// Zoom
+const zoom = d3.zoom().scaleExtent([1, 12]).on("zoom", e => {
+  g.attr("transform", e.transform);
+  const s = 5 / e.transform.k;  // keep the hatch the same size on screen at any zoom
+  hatch.attr("width", s).attr("height", s);
+  hatch.select(".hatch-bg").attr("width", s).attr("height", s);
+  hatch.select(".hatch-line").attr("y2", s).attr("stroke-width", 2.4 / e.transform.k);
+});
+svg.call(zoom);
+function zoomTo(features) {
+  const [[x0, y0], [x1, y1]] = path.bounds({ type: "FeatureCollection", features });
+  const k = Math.min(8, 0.9 / Math.max((x1 - x0) / 975, (y1 - y0) / 610));
+  svg.transition().duration(matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 600)
+    .call(zoom.transform, d3.zoomIdentity.translate(975 / 2, 610 / 2).scale(k).translate(-(x0 + x1) / 2, -(y0 + y1) / 2));
+}
+const stateOf = {};
+GEO.features.forEach(f => { const r = DATA[f.id]; if (r) stateOf[f.id.slice(0, 2)] = r[F.st]; });
+const stSel = document.getElementById("state");
+Object.entries(stateOf).sort((a, b) => a[1].localeCompare(b[1])).forEach(([fp, st]) => stSel.add(new Option(st, fp)));
+stSel.addEventListener("change", () => {
+  const fp = stSel.value;
+  if (!fp) { svg.transition().call(zoom.transform, d3.zoomIdentity); return; }
+  zoomTo(GEO.features.filter(f => f.id.startsWith(fp)));
+});
+document.getElementById("reset").addEventListener("click", () => {
+  stSel.value = ""; svg.transition().call(zoom.transform, d3.zoomIdentity); select(null);
+  document.getElementById("detail").innerHTML = `<h3>County details</h3><p class="empty">Hover over or tap a county to see its numbers.</p>`;
+});
+
+// Search
+const byLabel = {};
+const dl = document.getElementById("county-list");
+Object.entries(DATA).forEach(([fp, r]) => { const l = `${r[F.name]}, ${r[F.st]}`; byLabel[l.toLowerCase()] = fp; dl.append(new Option(l)); });
+function goTo(fp) { const f = GEO.features.find(x => x.id === fp); if (f) { zoomTo([f]); select(fp); } }
+document.getElementById("search").addEventListener("change", e => { const fp = byLabel[e.target.value.trim().toLowerCase()]; if (fp) goTo(fp); });
+
+// Priority list
+const pri = Object.entries(DATA).filter(([, r]) => r[F.cat] === 3).sort((a, b) => a[1][F.rank] - b[1][F.rank]);
+d3.select("#plist").selectAll("li").data(pri).join("li").append("button").attr("type", "button")
+  .html(([fp, r], i) => `<span class="rk">${i + 1}</span><span>${r[F.name]}, ${r[F.st]}</span><span class="v">${fmtInt(r[F.kids])} kids</span>`)
+  .on("click", (e, [fp]) => goTo(fp));
+
+render();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+</script>

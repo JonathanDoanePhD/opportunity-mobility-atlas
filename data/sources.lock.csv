@@ -1,0 +1,12 @@
+file,url,downloaded_utc,bytes,sha256
+SVI_2022_US_county.csv,https://svi.cdc.gov/Documents/Data/2022/csv/states_counties/SVI_2022_US_county.csv,2026-11-13,2301480,bc47d244153e359d5c09f621a4bf344a1e593159c16fbd3c28a15461b70a6c0f
+county_outcomes_simple.csv,https://www2.census.gov/ces/opportunity/county_outcomes_simple.csv,2026-11-13,1731009,c355f7cade477637edb57a09b81e11bc102cb61d76a4758bea640590f51a5895
+cty_covariates.csv,https://opportunityinsights.org/wp-content/uploads/2018/12/cty_covariates.csv,2026-11-13,1125129,4eb4f2f89292eb8f1d299bf104f870247ec432fe572a46e42fda89ec5ac98416
+eo1.csv,https://www.irs.gov/pub/irs-soi/eo1.csv,2026-11-13,49166596,5d1047c15cb6109b73ed244da97961b92a3ec122ac4419f354d248dc059df4e6
+eo2.csv,https://www.irs.gov/pub/irs-soi/eo2.csv,2026-11-13,127286751,46db809791e9cfe785c74fd6028ed18612f8a639edf763142c017cce3446ccfa
+eo3.csv,https://www.irs.gov/pub/irs-soi/eo3.csv,2026-11-13,167027760,4902eab594c4be7312192bb03ee5082580ca208bd4f6b9b5a6bcfc009c8f27f4
+eo4.csv,https://www.irs.gov/pub/irs-soi/eo4.csv,2026-11-13,886271,3c161b91056ea9291723aa608e40fe093a605238866e4ef8de8d6d9e26ce325c
+saipe_est22all.xls,https://www2.census.gov/programs-surveys/saipe/datasets/2022/2022-state-and-county/est22all.xls,2026-11-13,1118720,53fc850c59ba9cfcf7d140a41898553bd5b17995b4c36b54d30d0c84f6c0f176
+shapes/cb_2022_us_county_20m.zip,https://www2.census.gov/geo/tiger/GENZ2022/shp/cb_2022_us_county_20m.zip,2026-11-13,909884,337192bcf4348d278304ebfbe2fceaeb936b368cc476c2aba51b59bd9e0b2e13
+social_capital_county.csv,https://data.humdata.org/dataset/85ee8e10-0c66-4635-b997-79b6fad44c71/resource/ec896b64-c922-4737-b759-e4bd7f73b8cc/download/social_capital_county.csv,2026-11-13,717799,69de384096214aad20d0739d522b3731d6fa9bee5cff32c66eb5df89b8fb3828
+zcta_county_2020.txt,https://www2.census.gov/geo/docs/maps-data/data/rel2020/zcta520/tab20_zcta520_county20_natl.txt,2026-11-13,6821287,3ed41278d637dc249e0323306f68be8a6c234e3090f4de88ef328dee71aeaaaf
